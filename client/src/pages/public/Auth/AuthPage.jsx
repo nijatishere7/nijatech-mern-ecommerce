@@ -6,6 +6,7 @@ import { useNavigate, Link } from "react-router";
 
 // Redux
 import { useDispatch, useSelector } from "react-redux";
+import { loadUserCart } from "@/redux/slices/cartSlice";
 import { setCredentials } from "@/redux/slices/authSlice";
 
 // Axios
@@ -13,14 +14,14 @@ import API from "@/api/axios";
 
 // Icons
 import {
+  Eye,
   Mail,
   Lock,
   User,
-  Eye,
   EyeOff,
-  ArrowRight,
   Loader2,
   UserPlus,
+  ArrowRight,
 } from "lucide-react";
 
 // Toast
@@ -79,6 +80,8 @@ export const AuthPage = () => {
         }),
       );
 
+      dispatch(loadUserCart());
+
       toast.success(`Xoş gəldiniz, ${data.name}!`);
       navigate("/");
     } catch (error) {
@@ -101,7 +104,6 @@ export const AuthPage = () => {
   return (
     <div className="min-h-[85vh] flex items-center justify-center px-4 py-12">
       <div className="max-w-md w-full space-y-8 bg-white p-10 rounded-[40px] border border-gray-200 shadow-2xl shadow-blue-50 transition-all duration-500">
-        {/* Switcher Tab */}
         <div className="flex bg-gray-100 p-1.5 rounded-2xl mb-8">
           <button
             onClick={() => setIsLogin(true)}

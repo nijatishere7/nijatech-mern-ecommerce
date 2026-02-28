@@ -4,26 +4,26 @@ import { useState, useEffect, useMemo } from "react";
 // Icons
 import {
   User,
+  Lock,
+  Mail,
+  Bell,
+  Edit3,
+  Clock,
+  Phone,
+  LogOut,
+  MapPin,
+  Trash2,
   Package,
   Settings,
-  LogOut,
-  Edit3,
-  Mail,
-  Phone,
-  MapPin,
-  ChevronRight,
-  ExternalLink,
-  Clock,
-  CheckCircle2,
-  Bell,
-  Trash2,
-  Lock,
   ShoppingBag,
+  CheckCircle2,
+  ChevronRight,
 } from "lucide-react";
 
 // Redux
 import { logout } from "@/redux/slices/authSlice";
 import { setUser } from "@/redux/slices/authSlice";
+import { clearCart } from "@/redux/slices/cartSlice";
 import { useSelector, useDispatch } from "react-redux";
 
 // Axios
@@ -103,10 +103,13 @@ export const ProfilePage = () => {
     }).then(async (result) => {
       if (result.isConfirmed) {
         try {
+          const cartKey = `cart_${user._id}`;
           await API.delete("/auth/profile");
 
           dispatch(logout());
+          dispatch(clearCart());
           localStorage.removeItem("userInfo");
+          localStorage.removeItem(cartKey);
           toast.success("Hesabınız uğurla silindi.");
           navigate("/auth");
         } catch (error) {
@@ -176,6 +179,7 @@ export const ProfilePage = () => {
 
   const handleLogout = () => {
     dispatch(logout());
+    dispatch(clearCart());
     toast.success("Hesabdan çıxış edildi");
     navigate("/auth");
   };

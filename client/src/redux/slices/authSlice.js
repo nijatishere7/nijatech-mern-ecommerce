@@ -28,6 +28,7 @@ const authSlice = createSlice({
 
       localStorage.removeItem("userInfo");
       localStorage.removeItem("token");
+      localStorage.removeItem("cart");
     },
     setUser: (state, action) => {
       const updatedUser = { ...state.user, ...action.payload };
