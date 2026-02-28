@@ -13,7 +13,11 @@ const storage = new CloudinaryStorage({
   cloudinary: cloudinary,
   params: {
     folder: "nijatech_uploads",
-    allowed_formats: ["jpg", "png", "jpeg"],
+    format: async (req, file) => {
+      const extension = file.mimetype.split("/")[1];
+      return ["jpg", "png", "jpeg"].includes(extension) ? extension : "jpg";
+    },
+    public_id: (req, file) => `avatar-${Date.now()}`,
   },
 });
 
