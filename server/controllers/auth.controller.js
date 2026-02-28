@@ -112,7 +112,7 @@ export const forgotPassword = async (req, res) => {
       },
     });
 
-    const resetUrl = `${process.env.VITE_BASE_URL}/reset-password/${resetToken}`;
+    const resetUrl = `${process.env.FRONTEND_URL}/reset-password/${resetToken}`;
 
     const mailOptions = {
       to: user.email,
@@ -214,10 +214,16 @@ export const deleteUserAccount = async (req, res) => {
 
 export const updateAvatar = async (req, res) => {
   try {
+    if (!req.file) {
+      return res.status(400).json({ message: "Şəkil faylı tapılmadı" });
+    }
+
     const user = await User.findById(req.user._id);
 
     if (user) {
-      user.avatar = req.file.path;
+      const imageUrl = req.file.path || req.file.secure_url;
+
+      user.avatar = imageUrl;
       const updatedUser = await user.save();
 
       res.json({
@@ -228,6 +234,7 @@ export const updateAvatar = async (req, res) => {
       res.status(404).json({ message: "İstifadəçi tapılmadı" });
     }
   } catch (error) {
-    res.status(500).json({ message: error.message });
+    console.error("Cloudinary Upload Error:", error);
+    res.status(500).json({ message: "Server xətası: " + error.message });
   }
 };
