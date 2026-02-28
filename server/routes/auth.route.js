@@ -1,7 +1,8 @@
 // Packages
-import path from "path";
-import multer from "multer";
 import express from "express";
+
+// Configs
+import uploadCloud from "../config/cloudinary.js";
 
 // Controllers
 import {
@@ -17,18 +18,7 @@ import {
 
 // Middlewares
 import { protect } from "../middlewares/auth.middleware.js";
-
-const storage = multer.diskStorage({
-  destination(req, file, cb) {
-    cb(null, "uploads/");
-  },
-  filename(req, file, cb) {
-    cb(null, `${req.user._id}-${Date.now()}${path.extname(file.originalname)}`);
-  },
-});
-
-const upload = multer({ storage });
-
+;
 const router = express.Router();
 
 router.post("/login", loginUser);
@@ -37,7 +27,7 @@ router.get("/profile", protect, getUserProfile);
 router.post("/forgot-password", forgotPassword);
 router.post("/reset-password/:token", resetPassword);
 router.delete("/profile", protect, deleteUserAccount);
-router.put("/profile", protect, upload.single("avatar"), updateUserProfile);
-router.put("/profile/avatar", protect, upload.single("image"), updateAvatar);
+router.put("/profile", protect, uploadCloud.single("avatar"), updateUserProfile);
+router.put("/profile/avatar", protect, uploadCloud.single("image"), updateAvatar);
 
 export default router;

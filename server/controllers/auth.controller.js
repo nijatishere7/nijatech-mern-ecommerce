@@ -99,7 +99,7 @@ export const forgotPassword = async (req, res) => {
       .createHash("sha256")
       .update(resetToken)
       .digest("hex");
-    user.resetPasswordExpires = Date.now() + 3600000; 
+    user.resetPasswordExpires = Date.now() + 3600000;
     await user.save();
 
     const transporter = nodemailer.createTransport({
@@ -112,7 +112,7 @@ export const forgotPassword = async (req, res) => {
       },
     });
 
-    const resetUrl = `http://localhost:5173/reset-password/${resetToken}`;
+    const resetUrl = `${process.env.VITE_BASE_URL}/reset-password/${resetToken}`;
 
     const mailOptions = {
       to: user.email,
@@ -217,7 +217,7 @@ export const updateAvatar = async (req, res) => {
     const user = await User.findById(req.user._id);
 
     if (user) {
-      user.avatar = `http://localhost:3000/uploads/${req.file.filename}`;
+      user.avatar = req.file.path;
       const updatedUser = await user.save();
 
       res.json({
