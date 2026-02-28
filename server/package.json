@@ -1,6 +1,6 @@
 {
   "scripts": {
-    "start": "npx nodemon ./app.js"
+    "start": "node app.js"
   },
   "type": "module",
   "dependencies": {
